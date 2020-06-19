@@ -25,7 +25,7 @@ do b.start [
 
 Use with [Genie][] to run build functions using a task runner command-line interface.
 
-[Genie]://github.com/dashkite/genie/README.md
+[Genie]://github.com/dashkite/genie#genie
 
 ## API
 
