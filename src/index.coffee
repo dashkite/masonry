@@ -70,8 +70,9 @@ server = curry (root, options) ->
   app = express()
   app.use express.static root
   if options.fallback?
+    _path = p.resolve root, options.fallback
     app.get "*", (request, response) ->
-      response.sendFile Path.resolve root, options.fallback
+      response.sendFile _path
   app.listen 3000
 
 exec = (c, ax) ->
