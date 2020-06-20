@@ -1,7 +1,7 @@
 import assert from "assert"
 import * as p from "path"
 import {print, test} from "amen"
-import {define, run, start, glob, read, tr, write} from "../src"
+import {start, glob, read, tr, write} from "../src"
 import * as q from "panda-quill"
 
 source = p.resolve "test", "files"

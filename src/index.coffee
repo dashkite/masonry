@@ -84,4 +84,5 @@ node = (path, ax) ->
   child.stdout.pipe process.stdout
   child.stderr.pipe process.stderr
 
-export {start, glob, read, tr, extension, write, copy, watch, exec, node}
+export {start, glob, read, tr, extension, write, copy,
+  watch, server, exec, node}
