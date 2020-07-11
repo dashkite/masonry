@@ -54,7 +54,6 @@ write = curry (root) ->
 copy = curry (troot) ->
   r.map flow [
     k.read "path"
-    k.read "extension"
     k.peek ({directory, path}, sroot) ->
       source = p.join sroot, path
       target = p.join troot, path
