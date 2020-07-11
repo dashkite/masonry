@@ -1,6 +1,6 @@
 {
   "name": "@dashkite/brick",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Functions for composing asset pipelines",
   "files": [
     "build/src"
