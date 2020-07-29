@@ -68,11 +68,12 @@ watch = curry (path, handler) ->
 server = curry (root, options) ->
   app = express()
   app.use express.static root
-  if options.fallback?
+  {fallback, port} = options
+  if fallback?
     _path = p.resolve root, options.fallback
     app.get "*", (request, response) ->
       response.sendFile _path
-  app.listen 3000
+  app.listen {port}
 
 exec = (c, ax) ->
   child = execa c, ax
