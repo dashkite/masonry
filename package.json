@@ -33,6 +33,7 @@
     "execa": "^4.0.2",
     "express": "^4.17.1",
     "fast-glob": "^3.2.4",
+    "morgan": "^1.10.0",
     "panda-quill": "^5.0.0",
     "panda-river": "^6.0.0"
   },

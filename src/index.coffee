@@ -6,6 +6,7 @@ import {wrap, curry, flow, wait, identity} from "@pandastrike/garden"
 import * as k from "@dashkite/katana"
 import ch from "chokidar"
 import express from "express"
+import morgan from "morgan"
 import execa from "execa"
 
 parse = parse = (path) ->
@@ -67,12 +68,12 @@ watch = curry (path, handler) ->
 
 server = curry (root, options) ->
   app = express()
-  app.use express.static root
-  {fallback, port} = options
-  if fallback?
-    _path = p.resolve root, options.fallback
+  {application, port, files} = options
+  app.use morgan "dev"
+  app.use express.static root, files ? {}
+  if application?
     app.get "*", (request, response) ->
-      response.sendFile _path
+      response.sendFile application
   app.listen {port}
 
 exec = (c, ax) ->
