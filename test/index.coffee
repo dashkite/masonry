@@ -2,8 +2,10 @@ import assert from "assert"
 import p from "path"
 import fs from "fs/promises"
 import {print, test} from "amen"
-import {start, glob, read, tr, extension, write, copy, rm, watch, exec, server} from "../src"
 import * as q from "panda-quill"
+
+# module under test
+import * as m from "@dashkite/masonry"
 
 source = p.resolve "test", "files"
 build = p.resolve "test", "build"
@@ -14,14 +16,14 @@ do ->
 
     await test "simple build flow", ->
 
-      await rm build
+      await m.rm build
 
-      await do start [
-        glob "*.txt", source
-        read
-        tr ({path, input}) -> input + "whose fleece was white as snow."
-        extension ".pm"
-        write build
+      await do m.start [
+        m.glob "*.txt", source
+        m.read
+        m.tr ({path, input}) -> input + "whose fleece was white as snow."
+        m.extension ".pm"
+        m.write build
       ]
 
       assert.equal "Mary had a little lamb,\nwhose fleece was white as snow.",
@@ -29,9 +31,9 @@ do ->
 
     await test "copy", ->
 
-      await do start [
-        glob "*.z", source
-        copy build
+      await do m.start [
+        m.glob "*.z", source
+        m.copy build
       ]
 
       # give it a minute
@@ -44,8 +46,8 @@ do ->
       ->
         resolve = undefined
         pr = new Promise (_resolve) -> resolve = _resolve
-        w = watch source, -> resolve()
-        setTimeout (-> exec "touch", [p.join source, "test.z"]), 100
+        w = m.watch source, -> resolve()
+        setTimeout (-> m.exec "touch", [p.join source, "test.z"]), 100
         pr
         w.close()
 
@@ -53,7 +55,7 @@ do ->
       description: "server"
       wait: 1000
       ->
-        s = server build, {}
+        s = m.server build, {}
         assert.equal true, s.listening
         s.close()
   ]
