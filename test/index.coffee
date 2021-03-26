@@ -37,7 +37,10 @@ do ->
       ]
 
       # give it a minute
-      setTimeout (-> assert.equal true, await q.isFile p.join build, "test.z"),
+      setTimeout (->
+        assert.equal true,
+          await q.isFile p.join build, "test.z"
+        ),
         100
 
     test
