@@ -1,8 +1,8 @@
 import p from "path"
 import fglob from "fast-glob"
 import * as r from "panda-river"
-import * as q from "panda-quill"
 import {wrap, curry, flow, wait, identity} from "@pandastrike/garden"
+import * as q from "panda-quill"
 import * as k from "@dashkite/katana"
 import ch from "chokidar"
 import express from "express"
@@ -21,18 +21,21 @@ start = (fx) -> flow [ fx..., r.start ]
 glob = curry (pattern, root) ->
   flow [
       -> fglob pattern, cwd: root
-      r.map (path) -> [ root, path: parse path ]
+      r.map (path) ->  [{root, source: parse path }]
     ]
 
 read = r.wait r.map flow [
-  k.read "path"
-  k.poke ({path}, root) -> q.read p.join root, path
+  k.push ({source, root}) ->
+    q.read p.join root, source.path
+  k.write "input"
+  k.discard
 ]
 
 tr = (f) ->
   r.map flow [
-    k.read "path"
-    k.poke f
+    k.push f
+    k.write "output"
+    k.discard
   ]
 
 extension = (extension) ->
@@ -43,24 +46,20 @@ extension = (extension) ->
   ]
 
 write = curry (root) ->
+  r.map k.peek ({extension, source, output}) ->
+    path = p.join root, source.directory,
+      "#{source.name}#{extension ? source.extension}"
+    await q.mkdirp "0777", p.join root, source.directory
+    q.write path, output
+
+copy = curry (target) ->
   r.map flow [
-    k.read "path"
-    k.read "extension"
-    k.peek (_extension, {directory, name, extension}, output) ->
-      path = p.join root, directory, "#{name}#{_extension ? extension}"
-      await q.mkdirp "0777", p.join root, directory
-      q.write path, output
+    k.peek ({source, root}) ->
+      await q.mkdirp "0777", p.join target, source.directory
+      q.cp (p.join root, source.path), p.join target, source.path
   ]
 
-copy = curry (troot) ->
-  r.map flow [
-    k.read "path"
-    k.peek ({directory, path}, sroot) ->
-      source = p.join sroot, path
-      target = p.join troot, path
-      await q.mkdirp "0777", p.join troot, directory
-      q.cp source, target
-  ]
+rm = curry (target) -> q.rmr target
 
 watch = curry (path, handler) ->
   ch.watch path, ignoreInitial: true
@@ -68,12 +67,12 @@ watch = curry (path, handler) ->
 
 server = curry (root, options) ->
   app = express()
-  {application, port, files} = options
+  {fallback, port, files} = options
   app.use morgan "dev"
   app.use express.static root, files ? {}
-  if application?
+  if fallback?
     app.get "*", (request, response) ->
-      response.sendFile application
+      response.sendFile fallback
   app.listen {port}
 
 exec = (c, ax) ->
@@ -86,5 +85,17 @@ node = (path, ax) ->
   child.stdout.pipe process.stdout
   child.stderr.pipe process.stderr
 
-export {start, glob, read, tr, extension, write, copy,
-  watch, server, exec, node}
+export {
+  start
+  glob
+  read
+  tr
+  extension
+  write
+  copy
+  rm,
+  watch
+  server
+  exec
+  node
+}

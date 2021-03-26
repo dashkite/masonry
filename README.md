@@ -3,21 +3,13 @@
 Functions for reading, writing, and processing files, also known as asset pipelines.
 
 ```coffeescript
-import * as b from "@dashkite/brick"
+import * as b from "@dashkite/masonry"
+import {coffee} from "@dashkite/masonry-coffee"
 
 do b.start [
   b.glob [ "{src,test}/**/*.coffee" ], "."
   b.read
-  b.tr ({path}, code) ->
-    coffee.compile code,
-      bare: true
-      inlineMap: true
-      filename: path
-      transpile:
-        presets: [[
-          "@babel/preset-env"
-          targets: node: "current"
-        ]]
+  b.tr coffee
   b.extension ".js"
   b.write "build"
 ]
@@ -35,7 +27,7 @@ Brick’s composition is based on the use of _reactors_, also known as asynchron
 
 #### start steps
 
-GIven a list of (possibly asynchronous) functions, composes them and returns an asynchronous function.
+Given a list of (possibly asynchronous) functions, composes them and returns an asynchronous function.
 
 #### glob patterns, directory
 
@@ -69,15 +61,23 @@ May be used in place of `read` and `write` when you simply want to copy a file f
 
 These functions are intended to be used by themeslves and are included for convenience.
 
+#### rm directory
+
+Removes a directory. Useful for cleaning files from the previous build.
+
 #### watch path, handler
 
 Watch a directory or file and call a handler in response to changes.
 
 #### server directory, options
 
-Starts a static Web Server serving files from the given directory. Options:
+Starts a static Web Server serving files from the given directory. Options may include:
 
-- `fallback`: Specify a relative path to return when the request would otherwise return `404 Not Found`.
+- `fallback`: Path to file to serve if no file is found.
+- `files`: Options to pass to [serve-static][]
+- `port`: Which port to run the server on
+
+[serve-static]: http://expressjs.com/en/resources/middleware/serve-static.html
 
 #### exec command, arguments
 
