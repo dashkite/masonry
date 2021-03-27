@@ -1,11 +1,11 @@
 import assert from "assert"
 import p from "path"
-import fs from "fs/promises"
 import {print, test} from "amen"
 import * as q from "panda-quill"
 
 # module under test
 import * as m from "@dashkite/masonry"
+import {coffee} from "@dashkite/masonry/coffee"
 
 source = p.resolve "test", "files"
 build = p.resolve "test", "build"
@@ -61,4 +61,22 @@ do ->
         s = m.server build, {}
         assert.equal true, s.listening
         s.close()
+
+    test "Extensions", [
+
+      test "coffee", ->
+
+        await do m.start [
+          m.glob "*.coffee", source
+          m.read
+          m.tr coffee "web"
+          m.extension ".js"
+          m.write build
+        ]
+
+        assert.equal (await q.read p.join source, "test.js"),
+          await q.read p.join build, "test.js"
+
+
+    ]
   ]

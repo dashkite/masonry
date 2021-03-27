@@ -6,7 +6,10 @@
     "build/src"
   ],
   "main": "build/src/index.js",
-  "exports": "./build/src/index.js",
+  "exports": {
+    ".": "./build/src/index.js",
+    "./coffee": "./build/src/extensions/coffee.js"
+  },
   "scripts": {
     "test": "scripts/test",
     "build": "scripts/build"
@@ -42,6 +45,7 @@
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
     "amen": "^2.1.0",
+    "browserslist": "^4.16.3",
     "coffeescript": "^2.5.1"
   },
   "engine": "node >= 14"
