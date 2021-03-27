@@ -69,7 +69,7 @@ do ->
         await do m.start [
           m.glob "*.coffee", source
           m.read
-          m.tr coffee "web"
+          m.tr coffee "browser"
           m.extension ".js"
           m.write build
         ]
