@@ -1,10 +1,10 @@
-# Brick
+# Masonry
 
 Functions for reading, writing, and processing files, also known as asset pipelines.
 
 ```coffeescript
 import * as b from "@dashkite/masonry"
-import {coffee} from "@dashkite/masonry-coffee"
+import {coffee} from "@dashkite/masonry/coffee"
 
 do b.start [
   b.glob [ "{src,test}/**/*.coffee" ], "."
