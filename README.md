@@ -86,3 +86,20 @@ Spawn a child process to run the given command, with the given arguments.
 #### node script,  arguments
 
 Spawn a child process to run a given Node script, with the given arguments.
+
+### Extensions
+
+Extensions are typically used with `tr` to compile an asset.
+
+#### coffee _preset_
+
+- _preset_ must be one of `web` or `node`
+
+Compiles CoffeeScript into JavaScript.
+
+Provides two presets, corresponding to Babel `preset-env` targets:
+
+- `web`, which sets `targets` to `esmodules: true`
+- `node`, which sets `targets` to `node: "current"`
+
+We no longer need to target specific browsers, since we're relying on [support for ES Modules](https://caniuse.com/mdn-javascript_statements_import).
