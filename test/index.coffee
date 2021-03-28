@@ -74,7 +74,7 @@ do ->
           m.write build
         ]
 
-        assert.equal (await q.read p.join source, "test.js"),
+        assert.equal (await q.read p.join source, "test.js").trim(),
           await q.read p.join build, "test.js"
 
 

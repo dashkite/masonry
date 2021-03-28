@@ -8,11 +8,11 @@ coffee = (target) ->
     else throw new Error "masonry-coffee: unsupported target `#{target}`.
         Supported targets: node, browser."
 
-  ({path, input}) ->
+  ({source, input}) ->
     _coffee.compile input,
       bare: true
       inlineMap: true
-      filename: path
+      filename: source.path
       transpile:
         presets: [[
           "@babel/preset-env"

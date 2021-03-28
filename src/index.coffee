@@ -32,28 +32,28 @@ read = r.wait r.map flow [
 ]
 
 tr = (f) ->
-  r.map flow [
+  r.wait r.map flow [
     k.push f
     k.write "output"
     k.discard
   ]
 
 extension = (extension) ->
-  r.map flow [
+  r.wait r.map flow [
     k.push wrap extension
     k.write "extension"
     k.discard
   ]
 
 write = curry (root) ->
-  r.map k.peek ({extension, source, output}) ->
+  r.wait r.map k.peek ({extension, source, output}) ->
     path = p.join root, source.directory,
       "#{source.name}#{extension ? source.extension}"
     await q.mkdirp "0777", p.join root, source.directory
     q.write path, output
 
 copy = curry (target) ->
-  r.map flow [
+  r.wait r.map flow [
     k.peek ({source, root}) ->
       await q.mkdirp "0777", p.join target, source.directory
       q.cp (p.join root, source.path), p.join target, source.path
