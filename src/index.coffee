@@ -79,11 +79,13 @@ exec = (c, ax) ->
   child = execa c, ax
   child.stdout.pipe process.stdout
   child.stderr.pipe process.stderr
+  child
 
 node = (path, ax) ->
   child = execa.node path, ax
   child.stdout.pipe process.stdout
   child.stderr.pipe process.stderr
+  child
 
 export {
   start
