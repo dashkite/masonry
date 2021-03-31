@@ -84,9 +84,17 @@ do ->
           await do builder "*.coffee", ".js", coffee "node"
           verify "test.js"
 
-        test "pug", ->
-          await do builder "*.pug", ".html", pug
-          verify "test.html"
+        test "pug", [
+
+          test "render", ->
+            await do builder "*.pug", ".html", pug.render
+            verify "test.html"
+
+          test "compile", ->
+            await do builder "*.pug", ".pug.js", pug.compile
+            verify "test.pug.js"
+
+        ]
 
         test "stylus", ->
           await do builder "*.styl", ".css", stylus
@@ -103,6 +111,10 @@ do ->
         test "text", ->
           await do builder "*.txt", ".txt.js", text
           verify "test.txt.js"
+
+        test "composition", ->
+          await do builder "*.styl", ".css.js", [ stylus, text ]
+          verify "test.css.js"
 
       ]
   ]

@@ -32,11 +32,21 @@ read = r.wait r.map flow [
 ]
 
 tr = (f) ->
-  r.wait r.map flow [
-    k.push f
-    k.write "output"
-    k.discard
-  ]
+  if Array.isArray f
+    r.wait r.map flow [
+      k.push (context) ->
+        for g in f
+          output = g {context..., input: output ? context.input}
+        output
+      k.write "output"
+      k.discard
+    ]
+  else
+    r.wait r.map flow [
+      k.push f
+      k.write "output"
+      k.discard
+    ]
 
 extension = (extension) ->
   r.wait r.map flow [
