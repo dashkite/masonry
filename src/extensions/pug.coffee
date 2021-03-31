@@ -11,6 +11,7 @@ pug =
     Pug.render input,
       filename: source.path
       basedir: root
+      # TODO make it possible to write to the data attribute
       data: data
       filters:
         coffescript: adapter {root, source}, coffee
