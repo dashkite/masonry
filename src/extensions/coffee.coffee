@@ -1,6 +1,7 @@
 import _coffee from "coffeescript"
 
 # TODO we could infer the build targets from package.json
+# TODO when in production mode, don't include the sourcemap
 coffee = (target) ->
   targets = switch target
     when "node" then node: "current"

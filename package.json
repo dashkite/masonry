@@ -8,7 +8,11 @@
   "main": "build/src/index.js",
   "exports": {
     ".": "./build/src/index.js",
-    "./coffee": "./build/src/extensions/coffee.js"
+    "./coffee": "./build/src/extensions/coffee.js",
+    "./pug": "./build/src/extensions/pug.js",
+    "./stylus": "./build/src/extensions/stylus.js",
+    "./markdown": "./build/src/extensions/markdown.js",
+    "./yaml": "./build/src/extensions/yaml.js"
   },
   "scripts": {
     "test": "scripts/test",
@@ -37,9 +41,13 @@
     "execa": "^4.0.2",
     "express": "^4.17.1",
     "fast-glob": "^3.2.4",
+    "js-yaml": "^4.0.0",
+    "marked": "^2.0.1",
     "morgan": "^1.10.0",
     "panda-quill": "^5.0.0",
-    "panda-river": "^6.0.0"
+    "panda-river": "^6.0.0",
+    "pug": "^3.0.2",
+    "stylus": "^0.54.8"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

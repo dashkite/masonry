@@ -6,9 +6,18 @@ import * as q from "panda-quill"
 # module under test
 import * as m from "@dashkite/masonry"
 import {coffee} from "@dashkite/masonry/coffee"
+import {pug} from "@dashkite/masonry/pug"
+import {markdown} from "@dashkite/masonry/markdown"
+import {stylus} from "@dashkite/masonry/stylus"
+import {yaml} from "@dashkite/masonry/yaml"
 
-source = p.resolve "test", "files"
+source = p.resolve "test", "files", "input"
 build = p.resolve "test", "build"
+
+verify = (filename) ->
+  expected = (await q.read p.join source, "..", "output", filename).trim()
+  got = (await q.read p.join build, filename).trim()
+  assert.equal expected, got
 
 do ->
 
@@ -26,8 +35,7 @@ do ->
         m.write build
       ]
 
-      assert.equal "Mary had a little lamb,\nwhose fleece was white as snow.",
-        await q.read p.join build, "poem.pm"
+      verify "poem.pm"
 
     await test "copy", ->
 
@@ -37,11 +45,7 @@ do ->
       ]
 
       # give it a minute
-      setTimeout (->
-        assert.equal true,
-          await q.isFile p.join build, "test.z"
-        ),
-        100
+      setTimeout (-> verify "test.z"), 100
 
     test
       description: "watch, exec"
@@ -62,21 +66,38 @@ do ->
         assert.equal true, s.listening
         s.close()
 
-    test "Extensions", [
+    test "Extensions", do ->
 
-      test "coffee", ->
-
-        await do m.start [
-          m.glob "*.coffee", source
+      builder = (pattern, extension, transform) ->
+        m.start [
+          m.glob pattern, source
           m.read
-          m.tr coffee "browser"
-          m.extension ".js"
+          m.tr transform
+          m.extension extension
           m.write build
         ]
 
-        assert.equal (await q.read p.join source, "test.js").trim(),
-          await q.read p.join build, "test.js"
+      [
 
+        test "coffee", ->
+          await do builder "*.coffee", ".js", coffee "node"
+          verify "test.js"
 
-    ]
+        test "pug", ->
+          await do builder "*.pug", ".html", pug
+          verify "test.html"
+
+        test "stylus", ->
+          await do builder "*.styl", ".css", stylus
+          verify "test.css"
+
+        test "yaml", ->
+          await do builder "*.yaml", ".json", yaml
+          verify "test.json"
+
+        test "markdown", ->
+          await do builder "*.md", ".md.html", markdown
+          verify "test.md.html"
+
+      ]
   ]
