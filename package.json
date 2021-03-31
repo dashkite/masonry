@@ -12,7 +12,8 @@
     "./pug": "./build/src/extensions/pug.js",
     "./stylus": "./build/src/extensions/stylus.js",
     "./markdown": "./build/src/extensions/markdown.js",
-    "./yaml": "./build/src/extensions/yaml.js"
+    "./yaml": "./build/src/extensions/yaml.js",
+    "./text": "./build/src/extensions/text.js"
   },
   "scripts": {
     "test": "scripts/test",

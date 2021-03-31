@@ -10,6 +10,7 @@ import {pug} from "@dashkite/masonry/pug"
 import {markdown} from "@dashkite/masonry/markdown"
 import {stylus} from "@dashkite/masonry/stylus"
 import {yaml} from "@dashkite/masonry/yaml"
+import {text} from "@dashkite/masonry/text"
 
 source = p.resolve "test", "files", "input"
 build = p.resolve "test", "build"
@@ -98,6 +99,10 @@ do ->
         test "markdown", ->
           await do builder "*.md", ".md.html", markdown
           verify "test.md.html"
+
+        test "text", ->
+          await do builder "*.txt", ".txt.js", text
+          verify "test.txt.js"
 
       ]
   ]
