@@ -64,7 +64,7 @@ Extensions are typically used with `tr` to compile an asset.
 | ----------- | --------- | ------------------------------------------------------------ |
 | coffee      | preset    | Compiles CoffeeScript into JavaScript. See below for a description of the presets. |
 | pug.render  | -         | Renders Pug into HTML. Will use `data` if set by a previous reactor function. |
-| pug.compile | -         | Compiles Pug into a JavaScript module file. Will use `data` if set by a previous reactor function. |
+| pug.compile | -         | Compiles Pug into a JavaScript module file exporting a template. |
 | stylus      | -         | Renders Stylus into CSS.                                     |
 | yaml        | -         | Renders YAML into JSON.                                      |
 | markdown    | -         | Renders Markdown into HTML.                                  |
@@ -74,7 +74,7 @@ Extensions are typically used with `tr` to compile an asset.
 
 The  `coffee` extension takes a _preset_, which must be one of `browser` or `node`, corresponding to Babel `preset-env` targets:
 
-- `browser`, which sets `targets` to `esmodules: true`
+- `import`, which sets `targets` to `esmodules: true`
 - `node`, which sets `targets` to `node: "current"`
 
 We no longer need to target specific browsers, since we're relying on [support for ES Modules](https://caniuse.com/mdn-javascript_statements_import).
@@ -92,4 +92,3 @@ do m.start [
   m.write "build"
 ]
 ```
-

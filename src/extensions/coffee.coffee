@@ -5,9 +5,9 @@ import _coffee from "coffeescript"
 coffee = (target) ->
   targets = switch target
     when "node" then node: "current"
-    when "browser" then esmodules: true
+    when "import" then esmodules: true
     else throw new Error "masonry-coffee: unsupported target `#{target}`.
-        Supported targets: node, browser."
+        Supported targets: node, import."
 
   ({source, input}) ->
     _coffee.compile input,
