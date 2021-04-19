@@ -81,7 +81,8 @@ do ->
       [
 
         test "coffee", ->
-          await do builder "*.coffee", ".js", coffee "node"
+          await do builder "*.coffee", ".js",
+            coffee target: "node"
           verify "test.js"
 
         test "pug", [
