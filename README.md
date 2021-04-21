@@ -9,7 +9,7 @@ import {coffee} from "@dashkite/masonry/coffee"
 do m.start [
   m.glob [ "{src,test}/**/*.coffee" ], "."
   m.read
-  m.tr coffee
+  m.tr coffee target: "node"
   m.extension ".js"
   m.write "build"
 ]
@@ -62,7 +62,7 @@ Extensions are typically used with `tr` to compile an asset.
 
 | Name        | Arguments | Description                                                  |
 | ----------- | --------- | ------------------------------------------------------------ |
-| coffee      | preset    | Compiles CoffeeScript into JavaScript. See below for a description of the presets. |
+| coffee      | options   | Compiles CoffeeScript into JavaScript. See below for a description of the presets. |
 | pug.render  | -         | Renders Pug into HTML. Will use `data` if set by a previous reactor function. |
 | pug.compile | -         | Compiles Pug into a JavaScript module file exporting a template. |
 | stylus      | -         | Renders Stylus into CSS.                                     |
@@ -70,14 +70,15 @@ Extensions are typically used with `tr` to compile an asset.
 | markdown    | -         | Renders Markdown into HTML.                                  |
 | text        | -         | Compiles text into a JavaScript module that returns the given input. |
 
-#### CoffeeScript Presets
+#### CoffeeScript Options
 
-The  `coffee` extension takes a _preset_, which must be one of `browser` or `node`, corresponding to Babel `preset-env` targets:
+The  `coffee` extension takes the following options:
 
-- `import`, which sets `targets` to `esmodules: true`
-- `node`, which sets `targets` to `node: "current"`
+- `target`: `node` or `import`
 
-We no longer need to target specific browsers, since we're relying on [support for ES Modules](https://caniuse.com/mdn-javascript_statements_import).
+- `mode`: set to `debug` to include source maps
+
+The `target` option effectively sets the Babel `preset-env` `target`. If set to `node`, the target is set to `node: “current”`. If set to `import`, it’s set to `esmodules: true`. We no longer need to target specific browsers, since we're relying on [support for ES Modules](https://caniuse.com/mdn-javascript_statements_import).
 
 #### Composing Extensions
 
