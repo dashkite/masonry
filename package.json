@@ -35,6 +35,8 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
+    "@babel/core": "^7.13.16",
+    "@babel/preset-env": "^7.13.15",
     "@dashkite/katana": "^0.3.2",
     "@pandastrike/garden": "^8.0.1",
     "chokidar": "^3.5.1",
@@ -51,8 +53,6 @@
     "stylus": "^0.54.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.16",
-    "@babel/preset-env": "^7.13.15",
     "amen": "^3.0.0",
     "browserslist": "^4.16.4",
     "coffeescript": "^2.5.1"
