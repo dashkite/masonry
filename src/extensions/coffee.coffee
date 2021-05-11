@@ -1,4 +1,5 @@
 import _coffee from "coffeescript"
+import {transform} from "@babel/core"
 
 targets =
 
@@ -9,8 +10,9 @@ targets =
         inlineMap: true
         filename: source.path
         transpile:
+          transpile: transform
           presets: [[
-            "@babel/preset-env"
+            require("@babel/preset-env")
             targets: node: "current"
           ]]
 
@@ -21,8 +23,9 @@ targets =
         inlineMap: mode == "debug"
         filename: source.path
         transpile:
+          transpile: transform
           presets: [[
-            "@babel/preset-env"
+            require("@babel/preset-env")
             # i kid you not...
             targets: esmodules: true
             modules: false
