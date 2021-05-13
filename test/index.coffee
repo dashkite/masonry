@@ -30,7 +30,7 @@ do ->
 
     await test "simple build flow", ->
 
-      await m.rm build
+      await do m.rm build
 
       await do m.start [
         m.glob "*.txt", source
@@ -58,18 +58,10 @@ do ->
       ->
         resolve = undefined
         pr = new Promise (_resolve) -> resolve = _resolve
-        w = m.watch source, -> resolve()
-        setTimeout (-> m.exec "touch", [Path.join source, "test.z"]), 100
+        w = do m.watch source, -> resolve()
+        setTimeout (m.exec "touch", [Path.join source, "test.z"]), 100
         pr
         w.close()
-
-    test
-      description: "server"
-      wait: 1000
-      ->
-        s = m.server build, {}
-        assert.equal true, s.listening
-        s.close()
 
     test "Extensions", do ->
 

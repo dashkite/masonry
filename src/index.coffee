@@ -4,8 +4,6 @@ import * as _ from "@dashkite/joy"
 import * as k from "@dashkite/katana/async"
 import fglob from "fast-glob"
 import ch from "chokidar"
-import express from "express"
-import morgan from "morgan"
 import execa from "execa"
 
 parse = parse = (path) ->
@@ -71,23 +69,13 @@ copy = _.curry (target) ->
         (Path.join target, source.path)
   ]
 
-rm = _.curry (target) -> FS.rm target, recursive: true
+rm = _.curry (target) -> -> FS.rm target, recursive: true
 
-watch = _.curry (path, handler) ->
+watch = _.curry (path, handler) -> ->
   ch.watch path, ignoreInitial: true
     .on "all", handler
 
-server = _.curry (root, options) ->
-  app = express()
-  {fallback, port, files} = options
-  app.use morgan "dev"
-  app.use express.static root, files ? {}
-  if fallback?
-    app.get "*", (request, response) ->
-      response.sendFile fallback
-  app.listen {port}
-
-exec = (c, ax) ->
+exec = (c, ax) -> ->
   child = execa c, ax
   child.stdout.pipe process.stdout
   child.stderr.pipe process.stderr
@@ -101,8 +89,7 @@ export {
   extension
   write
   copy
-  rm,
+  rm
   watch
-  server
   exec
 }

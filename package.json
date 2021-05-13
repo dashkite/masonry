@@ -40,19 +40,15 @@
     "@dashkite/joy": "^0.3.0",
     "@dashkite/katana": "^0.4.6",
     "chokidar": "^3.5.1",
-    "colors": "^1.4.0",
     "execa": "^5.0.0",
-    "express": "^4.17.1",
     "fast-glob": "^3.2.5",
     "js-yaml": "^4.1.0",
     "marked": "^2.0.3",
-    "morgan": "^1.10.0",
     "pug": "^3.0.2",
     "stylus": "^0.54.8"
   },
   "devDependencies": {
     "amen": "^3.0.0",
-    "browserslist": "^4.16.6",
     "coffeescript": "^2.5.1"
   },
   "engine": "node >= 14"
