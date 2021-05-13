@@ -1,81 +1,83 @@
-import p from "path"
+import FS from "fs/promises"
+import Path from "path"
+import * as _ from "@dashkite/joy"
+import * as k from "@dashkite/katana/async"
 import fglob from "fast-glob"
-import * as r from "panda-river"
-import {wrap, curry, flow, wait, identity} from "@pandastrike/garden"
-import * as q from "panda-quill"
-import * as k from "@dashkite/katana"
 import ch from "chokidar"
 import express from "express"
 import morgan from "morgan"
 import execa from "execa"
 
 parse = parse = (path) ->
-  {dir, name, ext} = p.parse path
+  {dir, name, ext} = Path.parse path
   path: path
   directory: dir
   name: name
   extension: ext
 
-start = (fx) -> flow [ fx..., r.start ]
+start = (fx) -> _.flow [ fx..., _.start ]
 
-glob = curry (pattern, root) ->
-  flow [
+glob = _.curry (pattern, root) ->
+  _.flow [
       -> fglob pattern, cwd: root
-      r.map (path) ->  [{root, source: parse path }]
+      _.map (path) ->  k.Daisho.create {root, source: parse path }
     ]
 
-read = r.wait r.map flow [
+read = _.resolve _.map k.assign [
+  k.context
   k.push ({source, root}) ->
-    q.read p.join root, source.path
+    FS.readFile (Path.join root, source.path), "utf8"
   k.write "input"
-  k.discard
 ]
 
 tr = (f) ->
   if Array.isArray f
-    r.wait r.map flow [
+    _.resolve _.map k.assign [
+      k.context
       k.push (context) ->
         for g in f
           output = g {context..., input: output ? context.input}
         output
       k.write "output"
-      k.discard
     ]
   else
-    r.wait r.map flow [
+    _.resolve _.map k.assign [
+      k.context
       k.push f
       k.write "output"
-      k.discard
     ]
 
 extension = (extension) ->
-  r.wait r.map flow [
-    k.push wrap extension
+  _.wait _.map k.assign [
+    k.push _.wrap extension
     k.write "extension"
-    k.discard
   ]
 
-write = curry (root) ->
-  r.wait r.map k.peek ({extension, source, output}) ->
-    path = p.join root, source.directory,
-      "#{source.name}#{extension ? source.extension}"
-    await q.mkdirp "0777", p.join root, source.directory
-    q.write path, output
+write = _.curry (root) ->
+  _.resolve _.map k.assign [
+    k.context
+    k.peek ({extension, source, output}) ->
+      path = Path.join root, source.directory,
+        "#{source.name}#{extension ? source.extension}"
+      await FS.mkdir (Path.join root, source.directory), recursive: true
+      FS.writeFile path, output
+  ]
 
-copy = curry (target) ->
-  r.wait r.map flow [
+copy = _.curry (target) ->
+  _.wait _.map k.assign [
+    k.context
     k.peek ({source, root}) ->
-      await q.mkdirp "0777", p.join target, source.directory
-      q.cp (p.join root, source.path), p.join target, source.path
+      FS.copyFile (Path.join root, source.path),
+        (Path.join target, source.path)
   ]
 
-rm = curry (target) -> q.rmr target
+rm = _.curry (target) -> FS.rm target, recursive: true
 
-watch = curry (path, handler) ->
+watch = _.curry (path, handler) ->
   ch.watch path, ignoreInitial: true
     .on "all", handler
 
-server = curry (root, options) ->
+server = _.curry (root, options) ->
   app = express()
   {fallback, port, files} = options
   app.use morgan "dev"
@@ -87,12 +89,6 @@ server = curry (root, options) ->
 
 exec = (c, ax) ->
   child = execa c, ax
-  child.stdout.pipe process.stdout
-  child.stderr.pipe process.stderr
-  child
-
-node = (path, ax) ->
-  child = execa.node path, ax
   child.stdout.pipe process.stdout
   child.stderr.pipe process.stderr
   child
@@ -109,5 +105,4 @@ export {
   watch
   server
   exec
-  node
 }

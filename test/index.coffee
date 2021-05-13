@@ -1,7 +1,8 @@
 import assert from "assert"
-import p from "path"
+import FS from "fs/promises"
+import Path from "path"
 import {print, test} from "amen"
-import * as q from "panda-quill"
+import * as _ from "@dashkite/joy"
 
 # module under test
 import * as m from "@dashkite/masonry"
@@ -12,12 +13,15 @@ import {stylus} from "@dashkite/masonry/stylus"
 import {yaml} from "@dashkite/masonry/yaml"
 import {text} from "@dashkite/masonry/text"
 
-source = p.resolve "test", "files", "input"
-build = p.resolve "test", "build"
+source = Path.resolve "test", "files", "input"
+build = Path.resolve "test", "build"
 
 verify = (filename) ->
-  expected = (await q.read p.join source, "..", "output", filename).trim()
-  got = (await q.read p.join build, filename).trim()
+  paths =
+    source: Path.join source, "..", "output", filename
+    build: Path.join build, filename
+  expected = _.trim await FS.readFile paths.source, "utf8"
+  got = _.trim await FS.readFile paths.build, "utf8"
   assert.equal expected, got
 
 do ->
@@ -55,7 +59,7 @@ do ->
         resolve = undefined
         pr = new Promise (_resolve) -> resolve = _resolve
         w = m.watch source, -> resolve()
-        setTimeout (-> m.exec "touch", [p.join source, "test.z"]), 100
+        setTimeout (-> m.exec "touch", [Path.join source, "test.z"]), 100
         pr
         w.close()
 
