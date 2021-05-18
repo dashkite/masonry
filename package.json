@@ -35,11 +35,12 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@babel/core": "^7.14.2",
+    "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
     "@dashkite/joy": "^0.3.0",
     "@dashkite/katana": "^0.4.6",
     "chokidar": "^3.5.1",
+    "coffeescript": "^2.5.1",
     "execa": "^5.0.0",
     "fast-glob": "^3.2.5",
     "js-yaml": "^4.1.0",
@@ -48,8 +49,7 @@
     "stylus": "^0.54.8"
   },
   "devDependencies": {
-    "amen": "^3.0.0",
-    "coffeescript": "^2.5.1"
+    "amen": "^3.0.0"
   },
   "engine": "node >= 14"
 }
