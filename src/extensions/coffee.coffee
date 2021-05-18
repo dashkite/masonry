@@ -10,9 +10,12 @@ targets =
         inlineMap: true
         filename: source.path
         transpile:
-          transpile: transform
+          filename: source.path
+          plugins: [
+            [ require "babel-plugin-add-import-extension", {} ]
+          ]
           presets: [[
-            require("@babel/preset-env")
+            require "@babel/preset-env"
             targets: node: "current"
           ]]
 
@@ -23,9 +26,12 @@ targets =
         inlineMap: mode == "debug"
         filename: source.path
         transpile:
-          transpile: transform
+          filename: source.path
+          plugins: [
+            [ require "babel-plugin-add-import-extension", {} ]
+          ]
           presets: [[
-            require("@babel/preset-env")
+            require "@babel/preset-env"
             # i kid you not...
             targets: esmodules: true
             modules: false

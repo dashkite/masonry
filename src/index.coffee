@@ -76,10 +76,15 @@ watch = _.curry (path, handler) -> ->
     .on "all", handler
 
 exec = (c, ax) -> ->
-  child = execa c, ax
-  child.stdout.pipe process.stdout
-  child.stderr.pipe process.stderr
-  child
+  try
+    child = execa c, ax
+    child.stdout.pipe process.stdout
+    child.stderr.pipe process.stderr
+    # await so we catch any exception
+    # which we ignore in favor of piping
+    # stdout/stderr
+    await child
+
 
 export {
   start
