@@ -1,5 +1,4 @@
 import _coffee from "coffeescript"
-import {transform} from "@babel/core"
 
 targets =
 
