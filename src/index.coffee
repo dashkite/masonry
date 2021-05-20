@@ -77,14 +77,11 @@ watch = _.curry (path, handler) -> ->
 
 exec = (c, ax) -> ->
   try
-    child = execa c, ax
-    child.stdout.pipe process.stdout
-    child.stderr.pipe process.stderr
+    child = execa c, ax, stdout: "inherit", stderr: "inherit"
     # await so we catch any exception
     # which we ignore in favor of piping
     # stdout/stderr
     await child
-
 
 export {
   start
