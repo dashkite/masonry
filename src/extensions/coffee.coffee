@@ -7,9 +7,9 @@ targets =
       _coffee.compile input,
         bare: true
         inlineMap: true
-        filename: source.path
+        filename: source?.path
         transpile:
-          filename: source.path
+          filename: source?.path
           plugins: [
             [ require "babel-plugin-add-import-extension", {} ]
           ]
@@ -23,9 +23,9 @@ targets =
       _coffee.compile input,
         bare: true
         inlineMap: mode == "debug"
-        filename: source.path
+        filename: source?.path
         transpile:
-          filename: source.path
+          filename: source?.path
           plugins: [
             [ require "babel-plugin-add-import-extension", {} ]
           ]

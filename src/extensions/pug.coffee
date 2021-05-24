@@ -9,7 +9,7 @@ adapter = (c, f) -> (input) -> f {c..., input}
 pug =
   render: ({ root, source, input, data }) ->
     Pug.render input,
-      filename: source.path
+      filename: source?.path
       basedir: root
       # TODO make it possible to write to the data attribute
       data: data
@@ -21,7 +21,7 @@ pug =
 
   compile: ({ root, source, input }) ->
     f = Pug.compileClient input,
-      filename: source.path
+      filename: source?.path
       basedir: root
       filters:
         coffescript: adapter {root, source}, coffee

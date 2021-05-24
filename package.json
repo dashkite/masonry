@@ -37,15 +37,15 @@
   "dependencies": {
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
-    "@dashkite/joy": "^0.3.0",
-    "@dashkite/katana": "^0.4.6",
+    "@dashkite/joy": "^0.3.5",
+    "@dashkite/katana": "^0.4.7",
     "babel-plugin-add-import-extension": "^1.5.1",
     "chokidar": "^3.5.1",
     "coffeescript": "^2.5.1",
     "execa": "^5.0.0",
     "fast-glob": "^3.2.5",
     "js-yaml": "^4.1.0",
-    "marked": "^2.0.3",
+    "marked": "^2.0.5",
     "pug": "^3.0.2",
     "stylus": "^0.54.8"
   },
