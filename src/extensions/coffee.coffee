@@ -31,8 +31,11 @@ targets =
           ]
           presets: [[
             require "@babel/preset-env"
-            # i kid you not...
-            targets: esmodules: true
+            targets:
+              "last 2 chrome versions,
+                last 2 firefox versions,
+                last 2 safari versions,
+                last 2 ios_saf versions"
             modules: false
           ]]
 

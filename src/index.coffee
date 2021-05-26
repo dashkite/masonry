@@ -28,7 +28,7 @@ read = _.resolve _.map k.assign [
   k.write "input"
 ]
 
-tr = (f) ->
+transform = tr = (f) ->
   if Array.isArray f
     _.resolve _.map k.assign [
       k.context
@@ -69,7 +69,7 @@ copy = _.curry (target) ->
         (Path.join target, source.path)
   ]
 
-rm = _.curry (target) -> -> FS.rm target, recursive: true
+remove = rm = _.curry (target) -> -> FS.rm target, recursive: true
 
 watch = _.curry (path, handler) -> ->
   ch.watch path, ignoreInitial: true
@@ -88,10 +88,12 @@ export {
   glob
   read
   tr
+  transform
   extension
   write
   copy
   rm
+  remove
   watch
   exec
 }
