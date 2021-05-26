@@ -114,12 +114,10 @@ do ->
           await do builder "*.styl", ".css.js", [ stylus, text ]
           verify "test.css.js"
 
-        test "atlas"
-        # test description: "atlas", wait: false, ->
-        #   # TODO masonry has so many dependencies but atlas hardcodes file:.
-        #   await do builder "*.pug", ".html",
-        #     [ pug.render, atlas "@dashkite/masonry" ]
-        #   verify "test-with-import-map.html"
+        test description: "atlas", wait: false, ->
+          await do builder "*.pug", ".html",
+            [ pug.render, atlas "../navigate" ]
+          verify "test-with-import-map.html"
 
 
       ]
