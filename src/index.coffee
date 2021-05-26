@@ -34,7 +34,7 @@ transform = tr = (f) ->
       k.context
       k.push (context) ->
         for g in f
-          output = g {context..., input: output ? context.input}
+          output = await g {context..., input: output ? context.input}
         output
       k.write "output"
     ]
