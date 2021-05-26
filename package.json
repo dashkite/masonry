@@ -36,6 +36,7 @@
     "@dashkite/joy": "^0.3.5",
     "@dashkite/katana": "^0.4.7",
     "babel-plugin-add-import-extension": "^1.5.1",
+    "cheerio": "^1.0.0-rc.9",
     "chokidar": "^3.5.1",
     "coffeescript": "^2.5.1",
     "execa": "^5.0.0",

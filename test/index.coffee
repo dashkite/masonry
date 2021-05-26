@@ -12,6 +12,7 @@ import {markdown} from "@dashkite/masonry/markdown"
 import {stylus} from "@dashkite/masonry/stylus"
 import {yaml} from "@dashkite/masonry/yaml"
 import {text} from "@dashkite/masonry/text"
+import {atlas} from "@dashkite/masonry/atlas"
 
 source = Path.resolve "test", "files", "input"
 build = Path.resolve "test", "build"
@@ -112,6 +113,14 @@ do ->
         test "composition", ->
           await do builder "*.styl", ".css.js", [ stylus, text ]
           verify "test.css.js"
+
+        test "atlas"
+        # test description: "atlas", wait: false, ->
+        #   # TODO masonry has so many dependencies but atlas hardcodes file:.
+        #   await do builder "*.pug", ".html",
+        #     [ pug.render, atlas "@dashkite/masonry" ]
+        #   verify "test-with-import-map.html"
+
 
       ]
   ]

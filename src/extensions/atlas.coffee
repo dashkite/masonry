@@ -1,4 +1,5 @@
 import * as Atlas from "@dashkite/atlas"
+import * as cheerio from "cheerio"
 
 atlas = (name, map) ->
 
