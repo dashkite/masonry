@@ -60,25 +60,21 @@ The `server` function takes any of the following options:
 
 Extensions are typically used with `tr` to compile an asset.
 
-| Name        | Arguments | Description                                                  |
-| ----------- | --------- | ------------------------------------------------------------ |
-| coffee      | options   | Compiles CoffeeScript into JavaScript. See below for a description of the presets. |
-| pug.render  | -         | Renders Pug into HTML. Will use `data` if set by a previous reactor function. |
-| pug.compile | -         | Compiles Pug into a JavaScript module file exporting a template. |
-| stylus      | -         | Renders Stylus into CSS.                                     |
-| yaml        | -         | Renders YAML into JSON.                                      |
-| markdown    | -         | Renders Markdown into HTML.                                  |
-| text        | -         | Compiles text into a JavaScript module that returns the given input. |
+| Name           | Arguments | Description                                                  |
+| -------------- | --------- | ------------------------------------------------------------ |
+| coffee.node    | -         | Compiles CoffeeScript to Javascript, targeting Node.         |
+| coffee.browser | options   | Compiles CoffeeScript to Javascript, targeting the browser.  |
+| pug.render     | -         | Renders Pug into HTML. Will use `data` if set by a previous reactor function. |
+| pug.compile    | -         | Compiles Pug into a JavaScript module file exporting a template. |
+| stylus         | -         | Renders Stylus into CSS.                                     |
+| yaml           | -         | Renders YAML into JSON.                                      |
+| markdown       | -         | Renders Markdown into HTML.                                  |
+| text           | -         | Compiles text into a JavaScript module that returns the given input. |
+| atlas          | path, map | Generates an import map based on the entry point given by `path` and any additional modules, provided by `map`. |
 
-#### CoffeeScript Options
+#### Coffee Options
 
-The  `coffee` extension takes the following options:
-
-- `target`: `node` or `import`
-
-- `mode`: set to `debug` to include source maps
-
-The `target` option effectively sets the Babel `preset-env` `target`. If set to `node`, the target is set to `node: “current”`. If set to `import`, it’s set to `esmodules: true`. We no longer need to target specific browsers, since we're relying on [support for ES Modules](https://caniuse.com/mdn-javascript_statements_import).
+The  `coffee.browser` extension takes an option `mode`. If set to `debug` include source maps. The `coffee.node` extension currently _always_ generates source maps.
 
 #### Composing Extensions
 
