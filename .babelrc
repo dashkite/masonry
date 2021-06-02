@@ -1,1 +1,22 @@
-{ "presets": [ [ "@babel/env", { "targets": { "node": "current" } } ] ] }
+{
+  "plugins": [
+    [
+      "autocomplete-index",
+      {}
+    ],
+    [
+      "add-import-extension",
+      {}
+    ]
+  ],
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ]
+}

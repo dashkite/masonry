@@ -78,8 +78,7 @@ do ->
       [
 
         test "coffee", ->
-          await do builder "*.coffee", ".js",
-            coffee target: "node"
+          await do builder "*.coffee", ".js", do coffee.node
           verify "test.js"
 
         test "pug", [
@@ -114,6 +113,9 @@ do ->
           await do builder "*.styl", ".css.js", [ stylus, text ]
           verify "test.css.js"
 
+        # we test against another project (../navigate)
+        # because masonry has a ton of dependencies
+        # and breaks atlas
         test description: "atlas", wait: false, ->
           await do builder "*.pug", ".html",
             [ pug.render, atlas "../navigate" ]

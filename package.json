@@ -32,10 +32,9 @@
   "dependencies": {
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
-    "@dashkite/atlas": "^0.1.4",
+    "@dashkite/atlas": "file:../atlas",
     "@dashkite/joy": "^0.3.5",
     "@dashkite/katana": "^0.4.7",
-    "babel-plugin-add-import-extension": "^1.5.1",
     "cheerio": "^1.0.0-rc.9",
     "chokidar": "^3.5.1",
     "coffeescript": "^2.5.1",
@@ -47,7 +46,9 @@
     "stylus": "^0.54.8"
   },
   "devDependencies": {
-    "amen": "^3.0.0"
+    "amen": "^3.0.0",
+    "babel-plugin-add-import-extension": "^1.5.1",
+    "babel-plugin-autocomplete-index": "^0.2.0"
   },
   "engine": "node >= 14"
 }

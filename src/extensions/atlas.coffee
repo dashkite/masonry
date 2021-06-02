@@ -12,7 +12,6 @@ atlas = (path, map = {}) ->
     pkg = YAML.load await FS.readFile Path.resolve path, "package.json"
 
     generator = await Atlas.Reference.create pkg.name, "file:#{path}"
-
     for _name, description of map
       generator.dependencies.add await do ->
         Atlas.Reference.create _name, description
