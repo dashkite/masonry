@@ -69,7 +69,13 @@ copy = _.curry (target) ->
         (Path.join target, source.path)
   ]
 
-remove = rm = _.curry (target) -> -> FS.rm target, recursive: true
+remove = rm = _.curry (target) ->
+  ->
+    try
+      await FS.rm target, recursive: true
+    catch error
+      unless _.startsWith "ENOENT", error.message
+        throw error
 
 watch = _.curry (path, handler) -> ->
   ch.watch path, ignoreInitial: true
