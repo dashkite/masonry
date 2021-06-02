@@ -1,6 +1,6 @@
 import _coffee from "coffeescript"
 
-targets =
+coffee =
 
   node: ->
     ({source, input}) ->
@@ -11,14 +11,17 @@ targets =
         transpile:
           filename: source?.path
           plugins: [
+            [ require "babel-plugin-autocomplete-index", {} ]
             [ require "babel-plugin-add-import-extension", {} ]
           ]
-          presets: [[
-            require "@babel/preset-env"
-            targets: node: "current"
-          ]]
+          presets: [
+            [
+              require "@babel/preset-env"
+              targets: node: "current"
+            ]
+          ]
 
-  import: ({mode}) ->
+  browser: ({mode}) ->
     ({source, input}) ->
       _coffee.compile input,
         bare: true
@@ -27,6 +30,7 @@ targets =
         transpile:
           filename: source?.path
           plugins: [
+            [ require "babel-plugin-autocomplete-index", {} ]
             [ require "babel-plugin-add-import-extension", {} ]
           ]
           presets: [[
@@ -39,6 +43,4 @@ targets =
             modules: false
           ]]
 
-coffee = ({mode, target}) -> targets[target] {mode}
-
-export {coffee}
+export { coffee }
