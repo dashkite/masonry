@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-scripts/build
-node \
+scripts/build && node \
   --enable-source-maps \
   --trace-warnings \
   --unhandled-rejections=strict \
