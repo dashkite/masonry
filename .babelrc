@@ -1,14 +1,4 @@
 {
-  "plugins": [
-    [
-      "autocomplete-index",
-      {}
-    ],
-    [
-      "add-import-extension",
-      {}
-    ]
-  ],
   "presets": [
     [
       "@babel/env",

@@ -11,8 +11,7 @@ coffee =
         transpile:
           filename: source?.path
           plugins: [
-            [ require "babel-plugin-autocomplete-index", {} ]
-            [ require "babel-plugin-add-import-extension", {} ]
+            [require "babel-plugin-add-import-extension", {}]
           ]
           presets: [
             [
@@ -30,8 +29,7 @@ coffee =
         transpile:
           filename: source?.path
           plugins: [
-            [ require "babel-plugin-autocomplete-index", {} ]
-            [ require "babel-plugin-add-import-extension", {} ]
+            [require "babel-plugin-add-import-extension", {}]
           ]
           presets: [[
             require "@babel/preset-env"
