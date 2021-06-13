@@ -51,22 +51,26 @@ extension = (extension) ->
     k.write "extension"
   ]
 
-write = _.curry (root) ->
+write = _.curry (target) ->
   _.resolve _.map k.assign [
     k.context
     k.peek ({extension, source, output}) ->
-      path = Path.join root, source.directory,
-        "#{source.name}#{extension ? source.extension}"
-      await FS.mkdir (Path.join root, source.directory), recursive: true
-      FS.writeFile path, output
+      _directory = Path.join target, source.directory
+      _name = source.name + ( extension ? source.extension )
+      _path = Path.join _directory, _name
+      await FS.mkdir _directory, recursive: true
+      FS.writeFile _path, output
   ]
 
 copy = _.curry (target) ->
   _.wait _.map k.assign [
     k.context
     k.peek ({source, root}) ->
-      FS.copyFile (Path.join root, source.path),
-        (Path.join target, source.path)
+      _from = Path.join root, source.path
+      _to = Path.join target, source.path
+      _targetDirectory = Path.join target, source.directory
+      await FS.mkdir _targetDirectory, recursive: true
+      FS.copyFile _from, _to
   ]
 
 remove = rm = _.curry (target) ->
