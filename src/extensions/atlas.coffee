@@ -17,9 +17,15 @@ atlas = (path, map = {}) ->
         Atlas.Reference.create _name, description
 
     $ = cheerio.load input
-    $ "<script type = 'importmap'>"
-      .prependTo "head"
+
+    map = $ "<script type = 'importmap'>"
       .text generator.map.toJSON Atlas.jsdelivr
+
+    if (target = $ "script[type='importmap']").length > 0
+      target.replaceWith map
+    else
+      $ "head"
+        .prepend map
 
     $.html()
 
