@@ -46,7 +46,7 @@
     "stylus": "^0.55.0"
   },
   "devDependencies": {
-    "@dashkite/atlas": "^0.4.0",
+    "@dashkite/atlas": "^0.5.0",
     "amen": "^3.0.0"
   },
   "engine": "node >= 14"
