@@ -19,7 +19,9 @@ pug =
         stylus: adapter {root, source}, stylus
         yaml: adapter {root, source}, yaml
 
-  compile: ({ root, source, input }) ->
+  # default compile for browser
+  # for backward compatibility
+  compile: compile = ({ root, source, input }) ->
     f = Pug.compileClient input,
       filename: source?.path
       basedir: root
@@ -29,6 +31,20 @@ pug =
         stylus: adapter {root, source}, stylus
         yaml: adapter {root, source}, yaml
     "#{f}\nexport default template"
+
+  browser: { compile }
+
+  node:
+    compile: ({ root, source, input }) ->
+      f = Pug.compileClient input,
+        filename: source?.path
+        basedir: root
+        filters:
+          coffescript: adapter {root, source}, coffee
+          markdown: adapter {root, source}, markdown
+          stylus: adapter {root, source}, stylus
+          yaml: adapter {root, source}, yaml
+      "#{f}\nmodule.exports = template;"
 
 
 export {pug}
