@@ -33,7 +33,7 @@
     "@babel/core": "7.16.x",
     "@babel/preset-env": "7.16.x",
     "@dashkite/atlas": "file:../atlas",
-    "@dashkite/joy": "^0.3.11",
+    "@dashkite/joy": "^0.3.16",
     "@dashkite/katana": "^0.4.8",
     "babel-plugin-add-import-extension": "^1.6.0",
     "cheerio": "^1.0.0-rc.10",

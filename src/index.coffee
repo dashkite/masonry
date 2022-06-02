@@ -1,7 +1,12 @@
-import FS from "fs/promises"
-import Path from "path"
-import * as _ from "@dashkite/joy"
-import * as k from "@dashkite/katana/async"
+import FS from "node:fs/promises"
+import Path from "node:path"
+import { createHash } from "node:crypto"
+import * as Fn from "@dashkite/joy/function"
+import { generic } from "@dashkite/joy/generic"
+import * as Type from "@dashkite/joy/type"
+import * as It from "@dashkite/joy/iterable"
+import * as Val from "@dashkite/joy/value"
+import * as Text from "@dashkite/joy/text"
 import fglob from "fast-glob"
 import ch from "chokidar"
 import execa from "execa"
@@ -13,75 +18,74 @@ parse = parse = (path) ->
   name: name
   extension: ext
 
-start = (fx) -> _.flow [ fx..., _.start ]
+assign = ( key, f ) -> 
+  ( context ) -> context[ key ] = await f context
 
-glob = _.curry (pattern, root) ->
-  _.flow [
-      -> fglob pattern, cwd: root
-      _.map (path) ->  k.Daisho.create {root, source: parse path }
-    ]
+start = (fx) -> Fn.flow [ fx..., It.start ]
 
-read = _.resolve _.map k.assign [
-  k.context
-  k.push ({source, root}) ->
-    FS.readFile (Path.join root, source.path), "utf8"
-  k.write "input"
-]
+glob = Fn.curry (pattern, root) ->
+  Fn.flow [
+    -> fglob pattern, cwd: root
+    It.map (path) ->  { root, source: parse path }
+  ]
 
-transform = tr = (f) ->
-  if Array.isArray f
-    _.resolve _.map k.assign [
-      k.context
-      k.push (context) ->
-        for g in f
-          output = await g {context..., input: output ? context.input}
-        output
-      k.write "output"
-    ]
-  else
-    _.resolve _.map k.assign [
-      k.context
-      k.push f
-      k.write "output"
-    ]
+readText = read = It.resolve It.tap assign "input",
+  ({ root, source }) -> FS.readFile (Path.join root, source.path), "utf8"
+
+readBinary = It.resolve It.tap assign "input",
+  ({ root, source }) -> FS.readFile Path.join root, source.path
+
+hash = It.resolve It.tap assign "hash",
+  ({ input }) -> computeHash input
+
+computeHash = ( input ) ->
+  _hash = createHash "md5"
+  # see: https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+  _hash.update input, "binary"
+  _hash.digest "hex"
+
+transform = tr = generic description: "transform"
+
+generic transform, Type.isArray, (fx) ->
+  It.resolve It.tap assign "output", (context) ->
+    { input } = context
+    ( input = await f { context..., input } ) for f in fx
+    input
+
+generic transform, Type.isFunction, (f) ->
+  It.resolve It.tap assign "output", ( context ) -> f context
 
 extension = (extension) ->
-  _.wait _.map k.assign [
-    k.push _.wrap extension
-    k.write "extension"
-  ]
+  It.tap assign "extension", Fn.wrap extension
 
-write = _.curry (target) ->
-  _.resolve _.map k.assign [
-    k.context
-    k.peek ({extension, source, output}) ->
-      _directory = Path.join target, source.directory
-      _name = source.name + ( extension ? source.extension )
-      _path = Path.join _directory, _name
-      await FS.mkdir _directory, recursive: true
-      FS.writeFile _path, output
-  ]
+sourcePath = ({ root, source }) ->
+  Path.join root, source.path
 
-copy = _.curry (target) ->
-  _.wait _.map k.assign [
-    k.context
-    k.peek ({source, root}) ->
-      _from = Path.join root, source.path
-      _to = Path.join target, source.path
-      _targetDirectory = Path.join target, source.directory
-      await FS.mkdir _targetDirectory, recursive: true
-      FS.copyFile _from, _to
-  ]
+targetPath = (target, { source, extension }) ->
+  directory = Path.join target, source.directory
+  await FS.mkdir directory, recursive: true
+  name = source.name + ( extension ? source.extension )
+  Path.join directory, name
 
-remove = rm = _.curry (target) ->
+write = ( target ) ->
+  It.resolve It.tap ( context ) ->
+    { output } = context
+    FS.writeFile ( await targetPath target, context ), output
+
+copy = ( target ) ->
+  It.resolve It.tap ( context ) ->
+    FS.copyFile ( sourcePath context ),
+      ( await targetPath target, context )
+
+remove = rm = Fn.curry (target) ->
   ->
     try
       await FS.rm target, recursive: true
     catch error
-      unless _.startsWith "ENOENT", error.message
+      unless Text.startsWith "ENOENT", error.message
         throw error
 
-watch = _.curry (path, handler) -> ->
+watch = Fn.curry (path, handler) -> ->
   ch.watch path, ignoreInitial: true
     .on "all", handler
 
@@ -97,6 +101,10 @@ export {
   start
   glob
   read
+  readText
+  readBinary
+  hash
+  computeHash
   tr
   transform
   extension
