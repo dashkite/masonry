@@ -50,30 +50,42 @@ atlas = (path, root = ".", map = {}) ->
 
   ({input}) ->
 
-    # TODO possibly support this interface in Atlas directly?
-    pkg = YAML.load await FS.readFile Path.resolve path, "package.json"
+    console.log "masonry: atlas: starting"
 
+    # TODO possibly support this interface in Atlas directly?
+    console.log "masonry: atlas: reading package.json"
+    pkg = JSON.parse await FS.readFile Path.resolve path, "package.json"
+
+    console.log "masonry: atlas: creating file reference", path
     generator = await Atlas.Reference.create pkg.name, "file:#{path}"
     generator.root = root
+    console.log "masonry: atlas: adding dependencies"
     for _name, description of map
       generator.dependencies.add await do ->
         Atlas.Reference.create _name, description
 
     $ = cheerio.load input
 
+    console.log "masonry: atlas: computing hashes"
     for reference from generator.scopes when reference.directory?
       { directory } = reference
       reference.hash = await getHash directory
 
+    console.log "masonry: atlas: generating import map"
     map = $ "<script type = 'importmap'>"
       .text generator.map.toJSON deliver
 
+    console.log "masonry: atlas: adding import map to HTML"
     if (target = $ "script[type='importmap']").length > 0
       target.replaceWith map
     else
       $ "head"
         .prepend map
 
-    $.html()
+    console.log "masonry: atlas: rendering modified HTML"
+    result = $.html()
+    console.log "masonry: atlas: completed"
+    result
+
 
 export { atlas, getHash }
