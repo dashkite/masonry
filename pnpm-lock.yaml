@@ -10,7 +10,7 @@ specifiers:
   babel-plugin-add-import-extension: ^1.6.0
   cheerio: ^1.0.0-rc.12
   chokidar: ^3.5.3
-  coffeescript: 2.7.x
+  coffeescript: 2.7.0
   execa: ^5.1.1
   fast-glob: ^3.2.12
   js-yaml: ^4.1.0
