@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/core": "7.20.x",
     "@babel/preset-env": "7.20.x",
-    "@dashkite/atlas": "^0.6.0",
+    "@dashkite/atlas": "^0.6.1",
     "@dashkite/joy": "^0.3.16",
     "@dashkite/katana": "^0.4.8",
     "babel-plugin-add-import-extension": "^1.6.0",

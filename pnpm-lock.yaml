@@ -4,7 +4,7 @@ specifiers:
   '@babel/core': 7.20.x
   '@babel/preset-env': 7.20.x
   '@dashkite/amen-console': ^0.0.2
-  '@dashkite/atlas': ^0.6.0
+  '@dashkite/atlas': ^0.6.1
   '@dashkite/joy': ^0.3.16
   '@dashkite/katana': ^0.4.8
   amen: ^3.0.0
@@ -22,7 +22,7 @@ specifiers:
 dependencies:
   '@babel/core': 7.20.12
   '@babel/preset-env': 7.20.2_@babel+core@7.20.12
-  '@dashkite/atlas': 0.6.0
+  '@dashkite/atlas': 0.6.1
   '@dashkite/joy': 0.3.16
   '@dashkite/katana': 0.4.8
   babel-plugin-add-import-extension: 1.6.0_@babel+core@7.20.12
@@ -1201,8 +1201,8 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@dashkite/atlas/0.6.0:
-    resolution: {integrity: sha512-XOT1S0H5kS0xUDqSTaPb5tk/ZiBYi2XTuFjm2KlDyhqsT1buLrOVdxPTgGO6mAidpnrfawRK7It3I/qv64alqw==}
+  /@dashkite/atlas/0.6.1:
+    resolution: {integrity: sha512-5l/fLMHd5QsBiNxAaqw4ibS+Grdma0GlesaRtiUQwywtr3XMVeGHcNfEczLjgnesCDh02GuyzmlMaApoJecp6A==}
     dependencies:
       '@dashkite/joy': 0.3.16
       fast-glob: 3.2.12
