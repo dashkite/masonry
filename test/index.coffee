@@ -64,7 +64,7 @@ do ->
         pr
         w.close()
 
-    test "Extensions", do ->
+    test "Extensions", await do ->
 
       builder = (pattern, extension, transform) ->
         m.start [
@@ -77,9 +77,12 @@ do ->
 
       [
 
-        test "coffee", ->
-          await do builder "*.coffee", ".js", do coffee.node
-          verify "test.js"
+        await test
+          description: "coffee"
+          wait: false
+          ->
+            await do builder "*.coffee", ".js", do coffee.node
+            verify "test.js"
 
         test "pug", [
 

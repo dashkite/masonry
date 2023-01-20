@@ -1,6 +1,6 @@
 {
   "name": "@dashkite/masonry",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "Functions for composing asset pipelines",
   "files": [
     "build/src"
@@ -30,21 +30,21 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@babel/core": "7.16.12",
-    "@babel/preset-env": "7.16.11",
+    "@babel/core": "7.20.x",
+    "@babel/preset-env": "7.20.x",
     "@dashkite/atlas": "^0.6.0",
     "@dashkite/joy": "^0.3.16",
     "@dashkite/katana": "^0.4.8",
     "babel-plugin-add-import-extension": "^1.6.0",
-    "cheerio": "1.0.0-rc.12",
+    "cheerio": "^1.0.0-rc.12",
     "chokidar": "^3.5.3",
-    "coffeescript": "2.6.1",
+    "coffeescript": "2.7.0",
     "execa": "^5.1.1",
     "fast-glob": "^3.2.12",
     "js-yaml": "^4.1.0",
     "marked": "^3.0.8",
     "pug": "^3.0.2",
-    "stylus": "^0.55.0"
+    "stylus": "^0.59.0"
   },
   "devDependencies": {
     "@dashkite/amen-console": "^0.0.2",
