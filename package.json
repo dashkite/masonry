@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/core": "7.20.x",
     "@babel/preset-env": "7.20.x",
-    "@dashkite/atlas": "^0.6.1",
+    "@dashkite/atlas": "link:../atlas",
     "@dashkite/joy": "^0.3.16",
     "@dashkite/katana": "^0.4.8",
     "babel-plugin-add-import-extension": "^1.6.0",
@@ -47,8 +47,8 @@
     "stylus": "^0.59.0"
   },
   "devDependencies": {
-    "@dashkite/amen-console": "^0.0.2",
-    "amen": "^3.0.0"
+    "@dashkite/amen": "^0.2.0",
+    "@dashkite/amen-console": "^0.0.2"
   },
   "engine": "node >= 14"
 }
