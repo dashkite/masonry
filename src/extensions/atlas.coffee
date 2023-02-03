@@ -72,15 +72,15 @@ atlas = (path, root = ".", map = {}) ->
       reference.hash = await getHash directory
 
     console.log "masonry: atlas: generating import map"
-    map = $ "<script type = 'importmap'>"
+    _map = $ "<script type = 'importmap'>"
       .text generator.map.toJSON deliver
 
     console.log "masonry: atlas: adding import map to HTML"
     if (target = $ "script[type='importmap']").length > 0
-      target.replaceWith map
+      target.replaceWith _map
     else
       $ "head"
-        .prepend map
+        .prepend _map
 
     console.log "masonry: atlas: rendering modified HTML"
     result = $.html()
