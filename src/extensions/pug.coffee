@@ -14,7 +14,7 @@ pug =
       # TODO make it possible to write to the data attribute
       data: data
       filters:
-        coffescript: adapter {root, source}, coffee
+        coffee: adapter {root, source}, coffee.browser mode: "production"
         markdown: adapter {root, source}, markdown
         stylus: adapter {root, source}, stylus
         yaml: adapter {root, source}, yaml
@@ -26,13 +26,13 @@ pug =
       filename: source?.path
       basedir: root
       filters:
-        coffescript: adapter {root, source}, coffee
+        coffee: adapter {root, source}, coffee.browser mode: "production"
         markdown: adapter {root, source}, markdown
         stylus: adapter {root, source}, stylus
         yaml: adapter {root, source}, yaml
     "#{f}\nexport default template"
 
-  browser: { compile }
+  browser: compile
 
   node:
     compile: ({ root, source, input }) ->
@@ -40,7 +40,7 @@ pug =
         filename: source?.path
         basedir: root
         filters:
-          coffescript: adapter {root, source}, coffee
+          coffee: adapter {root, source}, coffee.browser mode: "production"
           markdown: adapter {root, source}, markdown
           stylus: adapter {root, source}, stylus
           yaml: adapter {root, source}, yaml
