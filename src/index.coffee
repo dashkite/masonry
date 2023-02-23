@@ -44,7 +44,7 @@ computeHash = ( input ) ->
   _hash.update input, "binary"
   _hash.digest "hex"
 
-transform = tr = generic description: "transform"
+transform = tr = generic name: "transform"
 
 generic transform, Type.isArray, (fx) ->
   It.resolve It.tap assign "output", (context) ->

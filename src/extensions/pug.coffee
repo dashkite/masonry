@@ -32,7 +32,7 @@ pug =
         yaml: adapter {root, source}, yaml
     "#{f}\nexport default template"
 
-  browser: compile
+  browser: { compile }
 
   node:
     compile: ({ root, source, input }) ->
