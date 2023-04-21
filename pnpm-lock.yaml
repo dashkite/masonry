@@ -6,6 +6,7 @@ specifiers:
   '@dashkite/amen': ^0.2.0
   '@dashkite/amen-console': ^0.0.2
   '@dashkite/atlas': link:../atlas
+  '@dashkite/drn': link:../drn
   '@dashkite/joy': ^0.3.16
   '@dashkite/katana': ^0.4.8
   babel-plugin-add-import-extension: ^1.6.0
@@ -23,6 +24,7 @@ dependencies:
   '@babel/core': 7.20.12
   '@babel/preset-env': 7.20.2_@babel+core@7.20.12
   '@dashkite/atlas': link:../atlas
+  '@dashkite/drn': link:../drn
   '@dashkite/joy': 0.3.16
   '@dashkite/katana': 0.4.8
   babel-plugin-add-import-extension: 1.6.0_@babel+core@7.20.12

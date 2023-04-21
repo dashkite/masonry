@@ -8,6 +8,7 @@ import * as Obj from "@dashkite/joy/object"
 import * as Type from "@dashkite/joy/type"
 import * as Text from "@dashkite/joy/text"
 import * as Atlas from "@dashkite/atlas"
+import { getDomain } from "@dashkite/drn"
 import * as cheerio from "cheerio"
 import execa from "execa"
 
@@ -22,10 +23,10 @@ generic deliver, Type.isString, ( name ) ->
 
 
 generic deliver, ( Type.isKind Atlas.FileReference ), ( reference ) ->
-  { name, hash } = reference
+  { name, hash, domain } = reference
   if Text.startsWith "@", name
     name = name[1..]
-  "https://modules.dashkite.com/#{name}/#{hash}/"
+  "https://#{domain}/#{name}/#{hash}/"
 
 generic deliver, ( Type.isKind Atlas.Scope ), ({ reference }) -> deliver reference
 
@@ -70,6 +71,7 @@ atlas = (path, root = ".", map = {}) ->
     for reference from generator.scopes when reference.directory?
       { directory } = reference
       reference.hash = await getHash directory
+      reference.domain = await getDomain "domain>dashkite/modules/com"
 
     console.log "masonry: atlas: generating import map"
     _map = $ "<script type = 'importmap'>"
