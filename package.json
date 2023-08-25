@@ -30,25 +30,25 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@babel/core": "7.20.x",
-    "@babel/preset-env": "7.20.x",
+    "@babel/core": "7.20.12",
+    "@babel/preset-env": "7.20.2",
     "@dashkite/atlas": "link:../atlas",
     "@dashkite/drn": "link:../drn",
     "@dashkite/joy": "^0.3.16",
     "@dashkite/katana": "^0.4.8",
     "babel-plugin-add-import-extension": "^1.6.0",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "1.0.0-rc.12",
     "chokidar": "^3.5.3",
     "coffeescript": "2.7.0",
     "execa": "^5.1.1",
-    "fast-glob": "^3.2.12",
+    "fast-glob": "^3.3.1",
     "js-yaml": "^4.1.0",
     "marked": "^3.0.8",
     "pug": "^3.0.2",
     "stylus": "^0.59.0"
   },
   "devDependencies": {
-    "@dashkite/amen": "^0.2.0",
+    "@dashkite/amen": "^0.2.2",
     "@dashkite/amen-console": "^0.0.2"
   },
   "engine": "node >= 14"
