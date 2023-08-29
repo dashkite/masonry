@@ -7,9 +7,14 @@ import * as Type from "@dashkite/joy/type"
 import * as It from "@dashkite/joy/iterable"
 import * as Val from "@dashkite/joy/value"
 import * as Text from "@dashkite/joy/text"
-import fglob from "fast-glob"
+import { Glob } from "glob"
+import { expand } from "@dashkite/polaris"
+
 import ch from "chokidar"
 import execa from "execa"
+
+_glob = ( patterns, options ) ->
+  new Glob patterns, options
 
 parse = parse = (path) ->
   {dir, name, ext} = Path.parse path
@@ -23,11 +28,12 @@ assign = ( key, f ) ->
 
 start = (fx) -> Fn.flow [ fx..., It.start ]
 
-glob = Fn.curry (pattern, root) ->
-  Fn.flow [
-    -> fglob pattern, cwd: root
-    It.map (path) ->  { root, source: parse path }
-  ]
+glob = Fn.curry ( patterns, root ) -> ->
+  for await path from _glob patterns, cwd: root
+    yield {
+      root
+      source: parse path
+    }
 
 readText = read = It.resolve It.tap assign "input",
   ({ root, source }) -> FS.readFile (Path.join root, source.path), "utf8"
@@ -47,30 +53,31 @@ computeHash = ( input ) ->
 transform = tr = generic name: "transform"
 
 generic transform, Type.isArray, (fx) ->
-  It.resolve It.tap assign "output", (context) ->
+  It.resolve It.tap assign "output", ( context ) ->
     { input } = context
-    ( input = await f { context..., input } ) for f in fx
+    ( input = await f { context..., input }) for f in fx
     input
 
 generic transform, Type.isFunction, (f) ->
   It.resolve It.tap assign "output", ( context ) -> f context
 
 extension = (extension) ->
-  It.tap assign "extension", Fn.wrap extension
+  It.tap assign "extension", ( context ) ->
+    expand extension, context
 
 sourcePath = ({ root, source }) ->
   Path.join root, source.path
 
-targetPath = (target, { source, extension }) ->
-  directory = Path.join target, source.directory
+targetPath = (target, context ) ->
+  { source, extension } = context
+  directory = Path.join ( expand target, context ), source.directory
   await FS.mkdir directory, recursive: true
   name = source.name + ( extension ? source.extension )
   Path.join directory, name
 
 write = ( target ) ->
   It.resolve It.tap ( context ) ->
-    { output } = context
-    FS.writeFile ( await targetPath target, context ), output
+    FS.writeFile ( await targetPath target, context ), context.output
 
 copy = ( target ) ->
   It.resolve It.tap ( context ) ->

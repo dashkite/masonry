@@ -1,10 +1,14 @@
-import _coffee from "coffeescript"
+import Coffee from "coffeescript"
 
-coffee =
+# TODO phase out these being functions returning functions
+#      make them completely dynamic instead (ex: mode is part
+#      of the context).
+
+Presets =
 
   node: ->
     ({source, input}) ->
-      _coffee.compile input,
+      Coffee.compile input,
         bare: true
         inlineMap: true
         filename: source?.path
@@ -22,7 +26,7 @@ coffee =
 
   browser: ({mode}) ->
     ({source, input}) ->
-      _coffee.compile input,
+      Coffee.compile input,
         bare: true
         inlineMap: mode == "debug"
         filename: source?.path
@@ -40,5 +44,11 @@ coffee =
                 last 2 ios_saf versions"
             modules: false
           ]]
+
+coffee = ( context ) ->
+  if ( preset = Presets[ context.build.preset ])?
+    ( preset({}) context )
+  else
+    throw new Error "masonry: unknown CoffeeScript preset #{ context.build.preset }"
 
 export { coffee }
