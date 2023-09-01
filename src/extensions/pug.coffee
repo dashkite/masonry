@@ -1,50 +1,45 @@
 import Pug from "pug"
-import {coffee} from "./coffee"
-import {stylus} from "./stylus"
-import {markdown} from "./markdown"
-import {yaml} from "./yaml"
 
-adapter = (c, f) -> (input) -> f {c..., input}
+import { coffee } from "./coffee"
+import { stylus } from "./stylus"
+import { markdown } from "./markdown"
+import { yaml } from "./yaml"
 
-pug =
-  render: ({ root, source, input, data }) ->
-    Pug.render input,
-      filename: source?.path
-      basedir: root
-      # TODO make it possible to write to the data attribute
-      data: data
-      filters:
-        coffee: adapter {root, source}, coffee.browser mode: "production"
-        markdown: adapter {root, source}, markdown
-        stylus: adapter {root, source}, stylus
-        yaml: adapter {root, source}, yaml
+embed = ( target, code ) ->
+  switch target
+    when "browser"
+      "#{code}\nexport default template"
+    when "node"
+      "#{code}\nmodule.exports = template;"
 
-  # default compile for browser
-  # for backward compatibility
-  compile: compile = ({ root, source, input }) ->
-    f = Pug.compileClient input,
-      filename: source?.path
-      basedir: root
-      filters:
-        coffee: adapter {root, source}, coffee.browser mode: "production"
-        markdown: adapter {root, source}, markdown
-        stylus: adapter {root, source}, stylus
-        yaml: adapter {root, source}, yaml
-    "#{f}\nexport default template"
+js = ({ root, source, input, build }) ->
+  embed build.target, Pug.compileClient input,
+    filename: source?.path
+    basedir: root
+    filters:
+      coffee: ( input ) -> coffee { root, source }
+      markdown: ( input ) -> markdown { root, source }
+      stylus: ( input ) -> stylus { root, source }
+      yaml: ( input ) -> yaml { root, source }
 
-  browser: { compile }
+html = ({ root, source, input, data }) ->
+  Pug.render input,
+    filename: source?.path
+    basedir: root
+    # TODO make it possible to write to the data attribute
+    data: data
+    filters:
+      coffee: ( input ) -> coffee { root, source }
+      markdown: ( input ) -> markdown { root, source }
+      stylus: ( input ) -> stylus { root, source }
+      yaml: ( input ) -> yaml { root, source }
 
-  node:
-    compile: ({ root, source, input }) ->
-      f = Pug.compileClient input,
-        filename: source?.path
-        basedir: root
-        filters:
-          coffee: adapter {root, source}, coffee.browser mode: "production"
-          markdown: adapter {root, source}, markdown
-          stylus: adapter {root, source}, stylus
-          yaml: adapter {root, source}, yaml
-      "#{f}\nmodule.exports = template;"
+Presets = { html, js }
 
+pug = ( context ) ->
+  if ( preset = Presets[ context.build.preset ])?
+    await preset context
+  else
+    throw new Error "masonry: unknown Pug preset #{ context.build.preset }"
 
-export {pug}
+export { pug }

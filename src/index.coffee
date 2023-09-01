@@ -7,14 +7,14 @@ import * as Type from "@dashkite/joy/type"
 import * as It from "@dashkite/joy/iterable"
 import * as Val from "@dashkite/joy/value"
 import * as Text from "@dashkite/joy/text"
-import { Glob } from "glob"
+import Glob from "fast-glob"
 import { expand } from "@dashkite/polaris"
 
 import ch from "chokidar"
 import execa from "execa"
 
 _glob = ( patterns, options ) ->
-  new Glob patterns, options
+  Glob.glob patterns, options
 
 parse = parse = (path) ->
   {dir, name, ext} = Path.parse path
@@ -29,7 +29,7 @@ assign = ( key, f ) ->
 start = (fx) -> Fn.flow [ fx..., It.start ]
 
 glob = Fn.curry ( patterns, root ) -> ->
-  for await path from _glob patterns, cwd: root
+  for path in await _glob patterns, cwd: root
     yield {
       root
       source: parse path
@@ -69,11 +69,11 @@ sourcePath = ({ root, source }) ->
   Path.join root, source.path
 
 targetPath = (target, context ) ->
-  { source, extension } = context
-  directory = Path.join ( expand target, context ), source.directory
-  await FS.mkdir directory, recursive: true
-  name = source.name + ( extension ? source.extension )
-  Path.join directory, name
+  do ({ source, extension } = context ) ->
+    directory = Path.join ( expand target, context ), source.directory
+    await FS.mkdir directory, recursive: true
+    name = source.name + ( extension ? source.extension )
+    Path.join directory, name
 
 write = ( target ) ->
   It.resolve It.tap ( context ) ->
