@@ -1,6 +1,5 @@
 import FS from "node:fs/promises"
 import Path from "node:path"
-import { createHash } from "node:crypto"
 import * as Fn from "@dashkite/joy/function"
 import { generic } from "@dashkite/joy/generic"
 import * as Type from "@dashkite/joy/type"
@@ -8,7 +7,6 @@ import * as It from "@dashkite/joy/iterable"
 import * as Val from "@dashkite/joy/value"
 import * as Text from "@dashkite/joy/text"
 import Glob from "fast-glob"
-import { expand } from "@dashkite/polaris"
 
 import ch from "chokidar"
 import execa from "execa"
@@ -28,27 +26,18 @@ assign = ( key, f ) ->
 
 start = (fx) -> Fn.flow [ fx..., It.start ]
 
-glob = Fn.curry ( patterns, root ) -> ->
-  for path in await _glob patterns, cwd: root
+glob = Fn.curry ( patterns ) -> ->
+  for path in await _glob patterns, cwd: "."
     yield {
-      root
+      root: "."
       source: parse path
     }
 
 readText = read = It.resolve It.tap assign "input",
   ({ root, source }) -> FS.readFile (Path.join root, source.path), "utf8"
 
-readBinary = It.resolve It.tap assign "input",
+readBytes = It.resolve It.tap assign "input",
   ({ root, source }) -> FS.readFile Path.join root, source.path
-
-hash = It.resolve It.tap assign "hash",
-  ({ input }) -> computeHash input
-
-computeHash = ( input ) ->
-  _hash = createHash "md5"
-  # see: https://nodejs.org/api/buffer.html#buffers-and-character-encodings
-  _hash.update input, "binary"
-  _hash.digest "hex"
 
 transform = tr = generic name: "transform"
 
@@ -62,15 +51,14 @@ generic transform, Type.isFunction, (f) ->
   It.resolve It.tap assign "output", ( context ) -> f context
 
 extension = (extension) ->
-  It.tap assign "extension", ( context ) ->
-    expand extension, context
+  It.tap assign "extension", wrap extension
 
 sourcePath = ({ root, source }) ->
   Path.join root, source.path
 
 targetPath = (target, context ) ->
   do ({ source, extension } = context ) ->
-    directory = Path.join ( expand target, context ), source.directory
+    directory = Path.join target, source.directory
     await FS.mkdir directory, recursive: true
     name = source.name + ( extension ? source.extension )
     Path.join directory, name
@@ -104,14 +92,14 @@ exec = (c, ax) -> ->
     # stdout/stderr
     await child
 
+set = Fn.curry ( name, f ) -> It.resolve It.tap assign name, f
+
 export {
   start
   glob
   read
   readText
-  readBinary
-  hash
-  computeHash
+  readBytes
   tr
   transform
   extension
@@ -121,4 +109,5 @@ export {
   remove
   watch
   exec
+  set
 }

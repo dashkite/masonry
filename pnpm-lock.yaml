@@ -64,6 +64,12 @@ devDependencies:
   '@dashkite/amen-console':
     specifier: ^0.0.2
     version: 0.0.2
+  '@dashkite/genie':
+    specifier: link:../genie
+    version: link:../genie
+  '@dashkite/genie-presets':
+    specifier: link:../genie-presets
+    version: link:../genie-presets
 
 packages:
 

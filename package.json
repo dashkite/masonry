@@ -50,7 +50,9 @@
   },
   "devDependencies": {
     "@dashkite/amen": "^0.2.2",
-    "@dashkite/amen-console": "^0.0.2"
+    "@dashkite/amen-console": "^0.0.2",
+    "@dashkite/genie": "link:../genie",
+    "@dashkite/genie-presets": "link:../genie-presets"
   },
   "engine": "node >= 14"
 }
