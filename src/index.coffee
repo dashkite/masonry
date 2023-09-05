@@ -7,9 +7,7 @@ import * as It from "@dashkite/joy/iterable"
 import * as Val from "@dashkite/joy/value"
 import * as Text from "@dashkite/joy/text"
 import Glob from "fast-glob"
-
-import ch from "chokidar"
-import execa from "execa"
+import Ch from "chokidar"
 
 _glob = ( patterns, options ) ->
   Glob.glob patterns, options
@@ -41,22 +39,22 @@ readBytes = It.resolve It.tap assign "input",
 
 transform = tr = generic name: "transform"
 
-generic transform, Type.isArray, (fx) ->
+generic transform, Type.isArray, ( fx ) ->
   It.resolve It.tap assign "output", ( context ) ->
     { input } = context
     ( input = await f { context..., input }) for f in fx
     input
 
-generic transform, Type.isFunction, (f) ->
+generic transform, Type.isFunction, ( f ) ->
   It.resolve It.tap assign "output", ( context ) -> f context
 
-extension = (extension) ->
+extension = ( extension ) ->
   It.tap assign "extension", wrap extension
 
 sourcePath = ({ root, source }) ->
   Path.join root, source.path
 
-targetPath = (target, context ) ->
+targetPath = ( target, context ) ->
   do ({ source, extension } = context ) ->
     directory = Path.join target, source.directory
     await FS.mkdir directory, recursive: true
@@ -81,16 +79,8 @@ remove = rm = Fn.curry (target) ->
         throw error
 
 watch = Fn.curry (path, handler) -> ->
-  ch.watch path, ignoreInitial: true
+  Ch.watch path, ignoreInitial: true
     .on "all", handler
-
-exec = (c, ax) -> ->
-  try
-    child = execa c, ax, stdout: "inherit", stderr: "inherit"
-    # await so we catch any exception
-    # which we ignore in favor of piping
-    # stdout/stderr
-    await child
 
 set = Fn.curry ( name, f ) -> It.resolve It.tap assign name, f
 
@@ -108,6 +98,5 @@ export {
   rm
   remove
   watch
-  exec
   set
 }

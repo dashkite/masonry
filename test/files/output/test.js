@@ -1,5 +1,0 @@
-"use strict";
-
-console.log("hello world");
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6Ijs7QUFBQUEsT0FBTyxDQUFDQyxHQUFSLENBQVksYUFBWiIsIm5hbWVzIjpbImNvbnNvbGUiLCJsb2ciXSwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsidGVzdC5jb2ZmZWUiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2cgXCJoZWxsbyB3b3JsZFwiXG4iXX0=
-//# sourceURL=test.coffee
