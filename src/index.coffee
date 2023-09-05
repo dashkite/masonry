@@ -49,7 +49,7 @@ generic transform, Type.isFunction, ( f ) ->
   It.resolve It.tap assign "output", ( context ) -> f context
 
 extension = ( extension ) ->
-  It.tap assign "extension", wrap extension
+  It.tap assign "extension", Fn.wrap extension
 
 sourcePath = ({ root, source }) ->
   Path.join root, source.path
