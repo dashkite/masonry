@@ -7,7 +7,6 @@ import * as It from "@dashkite/joy/iterable"
 import * as Val from "@dashkite/joy/value"
 import * as Text from "@dashkite/joy/text"
 import Glob from "fast-glob"
-import Ch from "chokidar"
 
 _glob = ( patterns, options ) ->
   Glob.glob patterns, options
@@ -70,19 +69,21 @@ copy = ( target ) ->
     FS.copyFile ( sourcePath context ),
       ( await targetPath target, context )
 
-remove = rm = Fn.curry (target) ->
-  ->
-    try
-      await FS.rm target, recursive: true
-    catch error
-      unless Text.startsWith "ENOENT", error.message
-        throw error
-
-watch = Fn.curry (path, handler) -> ->
-  Ch.watch path, ignoreInitial: true
-    .on "all", handler
-
 set = Fn.curry ( name, f ) -> It.resolve It.tap assign name, f
+
+export default {
+  start
+  glob
+  read
+  readText
+  readBytes
+  tr
+  transform
+  extension
+  write
+  copy
+  set  
+}
 
 export {
   start
@@ -95,8 +96,5 @@ export {
   extension
   write
   copy
-  rm
-  remove
-  watch
   set
 }
