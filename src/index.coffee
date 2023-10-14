@@ -19,9 +19,13 @@ parse = parse = (path) ->
   extension: ext
 
 assign = ( key, f ) -> 
-  ( context ) -> context[ key ] = await f context
+  Fn.tee ( context ) -> context[ key ] = await f context
 
-start = (fx) -> Fn.flow [ fx..., It.start ]
+start = ([ glob, fx... ]) -> 
+  Fn.flow [ 
+    glob
+    It.each Fn.flow fx 
+  ]
 
 glob = Fn.curry ( patterns ) -> ->
   for path in await _glob patterns, cwd: "."
@@ -30,25 +34,27 @@ glob = Fn.curry ( patterns ) -> ->
       source: parse path
     }
 
-readText = read = It.resolve It.tap assign "input",
-  ({ root, source }) -> FS.readFile (Path.join root, source.path), "utf8"
+readText = read = assign "input",
+  ({ root, build, source }) -> 
+    FS.readFile ( Path.join ( root ? build.root ), 
+      source.path ), "utf8"
 
-readBytes = It.resolve It.tap assign "input",
+readBytes = assign "input",
   ({ root, source }) -> FS.readFile Path.join root, source.path
 
 transform = tr = generic name: "transform"
 
 generic transform, Type.isArray, ( fx ) ->
-  It.resolve It.tap assign "output", ( context ) ->
+  assign "output", ( context ) ->
     { input } = context
     ( input = await f { context..., input }) for f in fx
     input
 
 generic transform, Type.isFunction, ( f ) ->
-  It.resolve It.tap assign "output", ( context ) -> f context
+  assign "output", ( context ) -> f context
 
 extension = ( extension ) ->
-  It.tap assign "extension", Fn.wrap extension
+  assign "extension", Fn.wrap extension
 
 sourcePath = ({ root, source }) ->
   Path.join root, source.path
@@ -61,15 +67,15 @@ targetPath = ( target, context ) ->
     Path.join directory, name
 
 write = ( target ) ->
-  It.resolve It.tap ( context ) ->
+  Fn.tee ( context ) ->
     FS.writeFile ( await targetPath target, context ), context.output
 
 copy = ( target ) ->
-  It.resolve It.tap ( context ) ->
+  Fn.tee ( context ) ->
     FS.copyFile ( sourcePath context ),
       ( await targetPath target, context )
 
-set = Fn.curry ( name, f ) -> It.resolve It.tap assign name, f
+set = Fn.curry assign
 
 export default {
   start
