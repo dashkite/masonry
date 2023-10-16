@@ -21,10 +21,13 @@ parse = parse = (path) ->
 assign = ( key, f ) -> 
   Fn.tee ( context ) -> context[ key ] = await f context
 
+# TODO joy: seems like this should be a bit easier
+# maybe It.each should await on products?
 start = ([ glob, fx... ]) -> 
   Fn.flow [ 
     glob
-    It.each Fn.flow fx 
+    It.resolve It.map Fn.flow fx 
+    It.start
   ]
 
 glob = Fn.curry ( patterns ) -> ->
