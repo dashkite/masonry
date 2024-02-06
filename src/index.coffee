@@ -30,10 +30,10 @@ start = ([ glob, fx... ]) ->
     It.start
   ]
 
-glob = Fn.curry ( patterns ) -> ->
-  for path in await _glob patterns, cwd: "."
+glob = ( patterns, options = root: "." ) -> ->
+  for path in await _glob patterns, cwd: options.root
     yield {
-      root: "."
+      root: options.root
       source: parse path
     }
 
