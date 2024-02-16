@@ -31,6 +31,7 @@
     "@babel/core": "7.22.15",
     "@babel/preset-env": "7.22.15",
     "@dashkite/joy": "^0.3.16",
+    "chalk": "^4.1.2",
     "chokidar": "^3.5.3",
     "fast-glob": "^3.3.1"
   },

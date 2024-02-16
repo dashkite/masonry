@@ -6,7 +6,31 @@ import * as Type from "@dashkite/joy/type"
 import * as It from "@dashkite/joy/iterable"
 import * as Val from "@dashkite/joy/value"
 import * as Text from "@dashkite/joy/text"
+import chalk from "chalk"
 import Glob from "fast-glob"
+
+# we have to format the error because :/
+format = ( error ) ->
+  if error.stack?
+    error
+      .stack
+      .split "\n"
+      .map ( line ) -> line.trim()
+      .slice 0, 1
+      .join " "
+  else
+    error.message
+
+# we have to do a transform-specific variation
+# of attempt because of the idiosyncractic compositional
+# semantics of transforms...
+attempt = ( transform ) ->
+  ( context ) ->
+    try
+      await transform context
+    catch error
+      console.warn chalk.red format error
+      context.input
 
 _glob = ( patterns, options ) ->
   Glob.glob patterns, options
@@ -88,6 +112,7 @@ export default {
   readBytes
   tr
   transform
+  attempt
   extension
   write
   copy
@@ -102,6 +127,7 @@ export {
   readBytes
   tr
   transform
+  attempt
   extension
   write
   copy
