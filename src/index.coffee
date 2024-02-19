@@ -86,23 +86,50 @@ extension = ( extension ) ->
 sourcePath = ({ root, source }) ->
   Path.join root, source.path
 
-targetPath = ( target, context ) ->
+targetDirectory = ({ source }, target ) ->
+  Path.join target, source.directory
+
+targetPath = ( context, target ) ->
   do ({ source, extension } = context ) ->
-    directory = Path.join target, source.directory
-    await FS.mkdir directory, recursive: true
+    directory = targetDirectory context, target
     name = source.name + ( extension ? source.extension )
     Path.join directory, name
 
 write = ( target ) ->
   Fn.tee ( context ) ->
-    FS.writeFile ( await targetPath target, context ), context.output
+    await FS.mkdir ( targetDirectory context, target ), recursive: true
+    FS.writeFile ( targetPath context, target ), context.output
 
 copy = ( target ) ->
   Fn.tee ( context ) ->
     FS.copyFile ( sourcePath context ),
       ( await targetPath target, context )
 
-set = Fn.curry assign
+mtime = ( path ) ->
+  try
+    stat = await FS.stat path
+    stat.mtimeMs
+  catch
+    0
+
+changed = ( target, fx ) ->
+  f = Fn.flow fx
+  Fn.tee ( context ) ->
+    source = await mtime sourcePath context
+    target = await mtime targetPath context, target
+    await f context if mtime.source > target
+
+clean = ( target ) ->
+  Fn.tee ( context ) ->
+    path = Path.join ".masonry", target
+    # recursive also makes these idempotent
+    await FS.mkdir ".masonry", recursive: true
+    # ignore errors because they're probably 
+    # just because the files aren't there
+    # and if it's anything else it doesn't
+    # matter anyway
+    try await FS.rm path, recursive: true
+    try await FS.rename target, path
 
 export default {
   start
@@ -116,7 +143,8 @@ export default {
   extension
   write
   copy
-  set  
+  changed
+  clean
 }
 
 export {
@@ -130,6 +158,6 @@ export {
   attempt
   extension
   write
+  changed
   copy
-  set
 }
