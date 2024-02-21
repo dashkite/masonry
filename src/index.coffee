@@ -45,15 +45,14 @@ parse = parse = (path) ->
 assign = ( key, f ) -> 
   Fn.tee ( context ) -> context[ key ] = await f context
 
-# TODO joy: seems like this should be a bit easier
-# maybe It.each should await on products?
 start = ([ glob, fx... ]) -> 
-  Fn.flow [ 
-    glob
-    It.resolve It.map Fn.flow fx 
-    It.start
-  ]
+  f = Fn.flow fx
+  -> await f value for await value from do glob
 
+concurrently = ([ glob, fx... ]) ->
+  f = Fn.flow fx
+  -> Promise.all ( f value for await value from do glob )
+        
 glob = ( patterns, options = root: "." ) -> ->
   for path in await _glob patterns, cwd: options.root
     yield {
@@ -133,6 +132,7 @@ clean = ( target ) ->
 
 export default {
   start
+  concurrently
   glob
   read
   readText
@@ -149,6 +149,7 @@ export default {
 
 export {
   start
+  concurrently
   glob
   read
   readText
