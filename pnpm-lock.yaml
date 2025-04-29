@@ -36,6 +36,9 @@ importers:
       '@dashkite/genie':
         specifier: ^0.8.4
         version: 0.8.4
+      '@dashkite/vista':
+        specifier: link:../vista
+        version: link:../vista
       babel-plugin-autocomplete-index:
         specifier: ^0.2.0
         version: 0.2.0(@babel/core@7.22.15)
