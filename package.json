@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "scripts/test",
-    "build": "scripts/build"
+    "build": "scripts/build",
+    "release": "scripts/release"
   },
   "repository": {
     "type": "git",
