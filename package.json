@@ -40,7 +40,7 @@
     "@dashkite/amen": "^0.2.2",
     "@dashkite/amen-console": "^0.0.2",
     "@dashkite/genie": "^0.8.4",
-    "@dashkite/genie-release": "^0.2.6",
+    "@dashkite/genie-release": "^0.2.7",
     "babel-plugin-autocomplete-index": "^0.2.0",
     "coffeescript": "^2.7.0"
   }
