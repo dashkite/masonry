@@ -3,7 +3,9 @@
   "version": "0.20.0",
   "description": "Functions for composing asset pipelines",
   "files": [
-    "build/src"
+    "build/src",
+    "build/browser/src",
+    "build/node/src"
   ],
   "exports": {
     ".": "./build/src/index.js"
