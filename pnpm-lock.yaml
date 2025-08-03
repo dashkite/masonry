@@ -9,10 +9,10 @@ importers:
   .:
     dependencies:
       '@babel/core':
-        specifier: 7.22.15
+        specifier: ^7.22.15
         version: 7.22.15
       '@babel/preset-env':
-        specifier: 7.22.15
+        specifier: ^7.22.15
         version: 7.22.15(@babel/core@7.22.15)
       '@dashkite/joy':
         specifier: ^0.7.0
