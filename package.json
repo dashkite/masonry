@@ -29,8 +29,8 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/preset-env": "^7.28.0",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
     "@dashkite/joy": "^0.7.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.6.0",
