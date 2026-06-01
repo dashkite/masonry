@@ -1,6 +1,6 @@
 {
   "name": "@dashkite/masonry",
-  "version": "0.25.16",
+  "version": "0.25.17",
   "description": "Functions for composing asset pipelines",
   "files": [
     "build/src"
