@@ -39,8 +39,8 @@
   "devDependencies": {
     "@dashkite/amen": "^0.5.0",
     "@dashkite/amen-console": "^0.4.0",
-    "@dashkite/genie": "^0.20.24",
-    "@dashkite/genie-release": "^0.5.13",
+    "@dashkite/genie": "^0.20.25",
+    "@dashkite/genie-release": "^0.5.14",
     "babel-plugin-autocomplete-index": "^0.2.0",
     "coffeescript": "^2.7.0"
   }
